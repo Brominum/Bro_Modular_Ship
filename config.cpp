@@ -37,7 +37,7 @@ class CfgVehicles {
 		author = "Bromine";
 		editorCategory = "Bro_MSHIP_EdCat";
 		editorSubcategory = "Bro_MSHIP_EdSubcat";
-		icon = "Bro_ModularWarehouse_Remaster\icon_ca.paa";
+		icon = "Bro_Modular_Ship\icon_ca.paa";
 		destrType = "DestructNo";
 		mapSize = 5;
 		keepHorizontalPlacement = 1;
