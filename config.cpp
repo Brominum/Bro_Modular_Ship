@@ -46,10 +46,8 @@ class CfgVehicles {
 			dragged3DEN = "_this call bro_fnc_snap_mship;";
 			registeredToWorld3DEN = "_this call bro_fnc_snap_mship;";
 		};
-		class MarkerLights
-		{
-			class bro_mship_interiorlight_1
-			{				
+		class MarkerLights {
+			class bro_mship_interiorlight_1 {
 				color[]={1,1,1,1};
 				diffuse[]={1,1,1};
 				name="interior_light_1";
@@ -58,16 +56,36 @@ class CfgVehicles {
 				intensity=8000;
 				drawLight=0;
 				blinking=0;
-				dayLight=0;
+				dayLight=1;
 				useFlare=0;
-				class Attenuation
-				{
+				class Attenuation {
 					start=0;
 					constant=0;
 					linear=0;
 					quadratic=10;
 				};
 				position[]={0,0.2,0};
+			};
+		};
+	};
+	class Land_Bro_MSHIP_hugeroom: Land_Bro_MSHIP_Base {
+		scope = 2;
+		displayName = "Ship Rooms: Huge";
+		model = "bro_modular_ship\bro_mship_hugeroom.p3d";
+		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hugeroom.jpg";
+		class MarkerLights: MarkerLights {
+			class bro_mship_Hugeroom_Light_1: bro_mship_interiorlight_1 {
+				ambient[]={0.15,0.15,0.15,0};
+				intensity=10000;
+				class Attenuation {
+					start=0;
+					constant=0;
+					linear=0;
+					quadratic=1;
+				};
+			};
+			class bro_mship_Hugeroom_Light_2: bro_mship_Hugeroom_Light_1 {
+				name="interior_light_2";
 			};
 		};
 	};
@@ -186,6 +204,7 @@ class CfgVehicles {
 		scope = 2;
 		icon = "a3\ui_f\data\map\vehicleicons\iconobject_2x1_ca.paa";
 		displayName = "Ship Room Sign";
+		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_Sign.jpg";
 		model = "bro_modular_ship\bro_mship_sign.p3d";
 		hiddenSelections[]={
 			"camo"
