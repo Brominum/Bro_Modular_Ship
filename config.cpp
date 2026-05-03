@@ -16,6 +16,12 @@ class CfgEditorSubcategories {
 	class Bro_MSHIP_EdSubcat {
 		displayName = "Ship Interior";
 	};
+	class Bro_MSHIP_Off_EdSubcat {
+		displayName = "Ship Interior (No Lights)";
+	};
+	class Bro_MSHIP_Props_EdSubcat {
+		displayName = "Ship Props";
+	};
 };
 class CfgFunctions  {
 	class bro  {
@@ -68,8 +74,36 @@ class CfgVehicles {
 			};
 		};
 	};
+	class Land_Bro_MSHIP_Sign: Land_Bro_MSHIP_Base {
+		scope = 2;
+		scopeCurator = 2;
+		icon = "a3\ui_f\data\map\vehicleicons\iconobject_2x1_ca.paa";
+		displayName = "Ship Room Sign";
+		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_Sign.jpg";
+		editorSubcategory = "Bro_MSHIP_Props_EdSubcat";
+		model = "bro_modular_ship\bro_mship_sign.p3d";
+		hiddenSelections[]={
+			"camo"
+		};
+		hiddenSelectionsTextures[]={
+			""
+		};
+		class MarkerLights {};
+		class Attributes {
+			class ObjectTextureCustom0 {
+				displayName="Text";
+				tooltip="Text on the sign.\nUse backslash + n for linebreak.";
+				property="ObjectTextureCustom0";
+				control="Edit";
+				expression="[_this,_value] call bro_fnc_sign_mship;";
+				defaultValue="(getObjectTextures _this) param [0,'',['']]";
+			};
+		};
+	};
+// Normal variant with lights on
 	class Land_Bro_MSHIP_hugeroom: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Rooms: Huge";
 		model = "bro_modular_ship\bro_mship_hugeroom.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hugeroom.jpg";
@@ -91,72 +125,84 @@ class CfgVehicles {
 	};
 	class Land_Bro_MSHIP_bigroom: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Rooms: Big";
 		model = "bro_modular_ship\bro_mship_bigroom.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_bigroom.jpg";
 	};
 	class Land_Bro_MSHIP_bigroom_through: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Rooms: Big, Thru";
 		model = "bro_modular_ship\bro_mship_bigroom_through.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_bigroom_through.jpg";
 	};
 	class Land_Bro_MSHIP_smallroom: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Rooms: Small";
 		model = "bro_modular_ship\bro_mship_smallroom.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_smallroom.jpg";
 	};
 	class Land_Bro_MSHIP_smallroom_through: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Rooms: Small, Thru";
 		model = "bro_modular_ship\bro_mship_smallroom_through.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_smallroom_through.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_2m: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: 2m";
 		model = "bro_modular_ship\bro_mship_hallway_2m.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_2m.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_4m: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: 4m";
 		model = "bro_modular_ship\bro_mship_hallway_4m.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_4m.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_8m: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: 8m";
 		model = "bro_modular_ship\bro_mship_hallway_8m.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_8m.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_corner: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: Corner";
 		model = "bro_modular_ship\bro_mship_hallway_corner.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_corner.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_tee: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: T";
 		model = "bro_modular_ship\bro_mship_hallway_tee.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_tee.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_cross: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: Cross";
 		model = "bro_modular_ship\bro_mship_hallway_cross.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_cross.jpg";
 	};
 	class Land_Bro_MSHIP_hallway_stairs: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Hallway: Stairs";
 		model = "bro_modular_ship\bro_mship_hallway_stairs.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_hallway_stairs.jpg";
 	};
 	class Land_Bro_MSHIP_Door: Land_Bro_MSHIP_Base {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Door";
 		model = "bro_modular_ship\bro_mship_door.p3d";
 		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_Door.jpg";
@@ -195,33 +241,96 @@ class CfgVehicles {
 	};
 	class Land_Bro_MSHIP_Door_Fake: Land_Bro_MSHIP_Door {
 		scope = 2;
+		scopeCurator = 2;
 		displayName = "Ship Door (Fake)";
 		numberOfDoors = 0;
 		class AnimationSources {};
 		class UserActions {};
 	};
-	class Land_Bro_MSHIP_Sign: Land_Bro_MSHIP_Base {
+// Lights off variants
+	class Land_Bro_MSHIP_hugeroom_OFF: Land_Bro_MSHIP_hugeroom {
 		scope = 2;
-		icon = "a3\ui_f\data\map\vehicleicons\iconobject_2x1_ca.paa";
-		displayName = "Ship Room Sign";
-		editorPreview = "bro_modular_ship\thumbs\Land_Bro_MSHIP_Sign.jpg";
-		model = "bro_modular_ship\bro_mship_sign.p3d";
-		hiddenSelections[]={
-			"camo"
-		};
-		hiddenSelectionsTextures[]={
-			""
-		};
+		scopeCurator = 2;
+		displayName = "Ship Rooms: Huge (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
 		class MarkerLights {};
-		class Attributes {
-			class ObjectTextureCustom0 {
-				displayName="Text";
-				tooltip="Text on the sign.\nUse backslash + n for linebreak.";
-				property="ObjectTextureCustom0";
-				control="Edit";
-				expression="[_this,_value] call bro_fnc_sign_mship;";
-				defaultValue="(getObjectTextures _this) param [0,'',['']]";
-			};
-		};
+	};
+	class Land_Bro_MSHIP_bigroom_OFF: Land_Bro_MSHIP_bigroom {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Rooms: Big (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_bigroom_through_OFF: Land_Bro_MSHIP_bigroom_through {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Rooms: Big, Thru (Off)";
+		model = "bro_modular_ship\bro_mship_bigroom_through.p3d";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_smallroom_OFF: Land_Bro_MSHIP_smallroom {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Rooms: Small (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_smallroom_through_OFF: Land_Bro_MSHIP_smallroom_through {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Rooms: Small, Thru (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_2m_OFF: Land_Bro_MSHIP_hallway_2m {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: 2m (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_4m_OFF: Land_Bro_MSHIP_hallway_4m {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: 4m (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_8m_OFF: Land_Bro_MSHIP_hallway_8m {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: 8m (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_corner_OFF: Land_Bro_MSHIP_hallway_corner {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: Corner (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_tee_OFF: Land_Bro_MSHIP_hallway_tee {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: T (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_cross_OFF: Land_Bro_MSHIP_hallway_cross {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: Cross (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
+	};
+	class Land_Bro_MSHIP_hallway_stairs_OFF: Land_Bro_MSHIP_hallway_stairs {
+		scope = 2;
+		scopeCurator = 2;
+		displayName = "Ship Hallway: Stairs (Off)";
+		editorSubcategory = "Bro_MSHIP_Off_EdSubcat";
+		class MarkerLights {};
 	};
 };
