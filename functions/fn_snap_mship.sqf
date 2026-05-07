@@ -1,86 +1,89 @@
 /*
-	bin_fnc_cargoPlatform_01_update
-	Update cargo platform position (3D Snapping Enabled)
+	fn_snap.sqf
+
+	Snap a modular object to nearby compatible objects via Memory LOD snap points.
+	Named selections expected in Memory LOD: snap_1 through snap_4 (gaps allowed).
+
+	Parameters:
+		0: OBJECT - the object being moved/placed
 */
-params["_object"];
+params [["_object", objNull]];
 
-if ((is3DEN && {current3DENOperation != "" || {get3DENActionState "MoveGridToggle" == 0}})) exitWith {};
+// Skip during active 3DEN drag operations
+if (is3DEN && {current3DENOperation != "" || {get3DENActionState "MoveGridToggle" == 0}}) exitWith {};
 
-private _nearbyObjects = nearestObjects [_object, ["Land_Bro_MSHIP_Base"], 10];
-_nearbyObjects = _nearbyObjects - [_object];
+// Skip when multiple objects are selected to prevent group moves destroying layouts
+if (count (get3DENSelected "Object") > 1) exitWith {};
 
-if (_nearbyObjects isEqualTo[]) exitWith {};
+private _nearbyObjects = nearestObjects [_object, ["Land_Bro_MSHIP_Base"], 10] - [_object];
+if (_nearbyObjects isEqualTo []) exitWith {};
 
-private _nearestObject = _nearbyObjects # 0;
-
-// Dynamically find snap points (Checks snap_1 through snap_8)
-private _snapPointsParent =[];
-for "_i" from 1 to 8 do
-{
-	private _selPos = _object selectionPosition format["snap_%1",_i];
+// Collect this object's snap point world positions
+// selectionPosition returns [0,0,0] for missing selections - filter those out
+private _mySnapPoints = [];
+for "_i" from 1 to 4 do {
+	private _selPos = _object selectionPosition format ["snap_%1", _i];
 	if !(_selPos isEqualTo [0,0,0]) then {
-		_snapPointsParent pushBack _selPos;
+		_mySnapPoints pushBack (_object modelToWorldVisual _selPos);
 	};
 };
+if (_mySnapPoints isEqualTo []) exitWith {};
 
-if (_snapPointsParent isEqualTo[]) exitWith {};
+// Search all nearby objects for the closest matching snap point pair
+private _bestDist = 1.0;
+private _bestMyPoint = [];
+private _bestTheirPoint = [];
+private _bestObject = objNull;
 
-private _snapped = false;
-
-for "_i" from 1 to 8 do
 {
-	if (_snapped) exitWith {};
-
-	private _targetSelPos = _nearestObject selectionPosition format["snap_%1",_i];
-	if !(_targetSelPos isEqualTo [0,0,0]) then {
-		private _snapPointASL = _nearestObject modelToWorldVisualWorld _targetSelPos;
-
-		{
-			private _parentModelPos = _x;
-			private _parentWorldASL = _object modelToWorldVisualWorld _parentModelPos;
-
-			// Check distance in true 3D space
-			if (_snapPointASL distance _parentWorldASL <= 1.5) exitWith
+	private _other = _x;
+	for "_i" from 1 to 4 do {
+		private _theirSelPos = _other selectionPosition format ["snap_%1", _i];
+		if !(_theirSelPos isEqualTo [0,0,0]) then {
+			private _theirWorldPos = _other modelToWorldVisual _theirSelPos;
 			{
-				// Adjust direction
-				private _dirTo = getDir _nearestObject - 360;
-				private _dirObject = getDir _object;
-				private _dir = _dirTo;
-
-				for "_j" from 0 to 7 do
-				{
-					_dir = _dirTo + _j * 90;
-					if(abs(_dir - _dirObject) < 45) then
-					{
-						_j = 10;
-					};
+				private _dist = _x distance _theirWorldPos;
+				if (_dist < _bestDist) then {
+					_bestDist = _dist;
+					_bestMyPoint = _x;
+					_bestTheirPoint = _theirWorldPos;
+					_bestObject = _other;
 				};
-				
-				_object set3DENAttribute["rotation", [0,0, _dir]];
+			} forEach _mySnapPoints;
+		};
+	};
+} forEach _nearbyObjects;
 
-				// Calculate mathematical rotated offset to avoid 1-frame engine delay
-				private _currentModelOriginASL = _object modelToWorldVisualWorld [0,0,0];
-				
-				_parentModelPos params ["_mx", "_my", "_mz"];
-				private _wx = (_mx * cos _dir) + (_my * sin _dir);
-				private _wy = -(_mx * sin _dir) + (_my * cos _dir);
-				private _wz = _mz;
-				
-				private _rotatedOffset = [_wx, _wy, _wz];
-				private _currentSnapPointASL = _currentModelOriginASL vectorAdd _rotatedOffset;
+if (isNull _bestObject) exitWith {};
 
-				// Calculate the exact 3D translation vector needed
-				private _shift = _snapPointASL vectorDiff _currentSnapPointASL;
-
-				// Apply translation to object's current ASL position
-				private _currentPosASL = getPosASL _object;
-				private _newPosASL = _currentPosASL vectorAdd _shift;
-
-				// Convert to ATL so the Eden Editor accepts the exact correct height
-				_object set3DENAttribute["position", ASLToATL _newPosASL];
-
-				_snapped = true;
-			};
-		} forEach _snapPointsParent;
+// Find the closest 90-degree rotation increment relative to the target object
+// Uses modular arithmetic to correctly handle the 0/360 degree boundary
+private _dirTarget = getDir _bestObject;
+private _dirCurrent = getDir _object;
+private _bestDir = _dirTarget;
+private _bestDiff = 360;
+for "_j" from 0 to 3 do {
+	private _candidate = _dirTarget + _j * 90;
+	private _diff = abs (((_candidate - _dirCurrent + 540) mod 360) - 180);
+	if (_diff < _bestDiff) then {
+		_bestDiff = _diff;
+		_bestDir = _candidate;
 	};
 };
+
+// Save snap point in model space before rotation is applied
+// After set3DENAttribute the world transform changes, so model space is stable
+private _snapPosModel = _object worldToModel _bestMyPoint;
+
+_object set3DENAttribute ["rotation", [0, 0, _bestDir]];
+
+// Recalculate where that model-space point now sits in world space post-rotation
+private _snapPosWorld = _object modelToWorldVisual _snapPosModel;
+
+// Shift the object so our snap point coincides with theirs
+private _newPosASL = (getPosASL _object) vectorAdd (_bestTheirPoint vectorDiff _snapPosWorld);
+
+// Lock Z to the target object's altitude for flush/level placement
+_newPosASL set [2, (getPosASL _bestObject) # 2];
+
+_object set3DENAttribute ["position", ASLToATL _newPosASL];
