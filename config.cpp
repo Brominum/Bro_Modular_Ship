@@ -33,8 +33,8 @@ class CfgFunctions  {
 	};
 };
 class CfgVehicles {
-	class HouseBase;
-	class House_f: HouseBase {
+	class House;
+	class House_F: House {
 		class EventHandlers;
 	};
 	class Land_Bro_MSHIP_Base: House_f {
